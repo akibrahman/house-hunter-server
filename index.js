@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
+import { BookingRoute } from "./Routes/BookingRoute.js";
 import { HouseRoute } from "./Routes/HouseRoute.js";
 import { IndexRoute } from "./Routes/IndexRoute.js";
 import { UserRoute } from "./Routes/UserRoute.js";
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use("/", IndexRoute);
 app.use("/user", UserRoute);
 app.use("/house", HouseRoute);
+app.use("/booking", BookingRoute);
 
 app.listen(port, () => {
   console.log(`House Hunter Server is Running on Port - ${port}`);

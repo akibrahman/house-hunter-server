@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { BookingModel } from "../Models/BookingModel.js";
 import { HouseModel } from "../Models/HouseModel.js";
 import { UserModel } from "../Models/UserModel.js";
 
@@ -165,13 +166,62 @@ const UpdateOneHouses = async (req, res) => {
   res.send({ updatedHouse, success: true });
 };
 
+//! Delete a house
+const DeleteOneHouses = async (req, res) => {
+  const id = req.params.id;
+  await HouseModel.findByIdAndDelete(id);
+  res.send({ success: true });
+};
+
+//! Add Booking
+const AddBookingController = async (req, res) => {
+  const data = await req.body;
+  await BookingModel.create(data);
+  res.send({ success: true });
+};
+
+//! Get one Booking
+const GetOneBookingController = async (req, res) => {
+  const id = req.params.id;
+  const booking = await BookingModel.findById(id);
+  res.send(booking);
+};
+
+//! Get User Wise Booking
+const GetUserBookingController = async (req, res) => {
+  const email = req.params.email;
+  console.log(email);
+  const bookings = await BookingModel.find({ renterEmail: email });
+  res.send(bookings);
+};
+
+//! Get Owner Booking
+const GetOwnerBookingController = async (req, res) => {
+  const email = req.params.email;
+  const booked = await BookingModel.find({ owner: email });
+  res.send(booked);
+};
+
+//! Delete A Booking
+const DeleteBookingController = async (req, res) => {
+  const id = req.params.id;
+  await BookingModel.findByIdAndDelete(id);
+  res.send({ success: true });
+};
+
 export {
+  AddBookingController,
   AddHouseController,
   AddUserController,
+  DeleteBookingController,
+  DeleteOneHouses,
   FindUserController,
   GetAllHouses,
   GetFilteredHouses,
+  GetOneBookingController,
   GetOneHouses,
+  GetOwnerBookingController,
+  GetUserBookingController,
   IndexController,
   LogInUserController,
   LogOutUserController,
