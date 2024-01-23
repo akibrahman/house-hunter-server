@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { HouseModel } from "../Models/HouseModel.js";
 import { UserModel } from "../Models/UserModel.js";
 
 //! Root Controller
@@ -106,9 +107,56 @@ const LogOutUserController = async (req, res) => {
     .send({ success: true });
 };
 
+//! Add House
+const AddHouseController = async (req, res) => {
+  const house = await req.body;
+  await HouseModel.create(house);
+  res.send({ success: true });
+};
+
+//! Get All Houses
+const GetAllHouses = async (req, res) => {
+  const email = req.query.email;
+  const houses = await HouseModel.find({ owner: email });
+  res.send(houses);
+};
+
+//! Get Filtered Houses
+const GetFilteredHouses = async (req, res) => {
+  const query = {};
+  const title = req.query.title;
+  const city = req.query.city;
+  const bedroom = req.query.bedroom;
+  const bathroom = req.query.bathroom;
+  const size = req.query.size;
+  if (title) {
+    const titleRegEx = new RegExp(title, "i");
+    query.name = titleRegEx;
+  }
+  if (city) {
+    const cityRegEx = new RegExp(city, "i");
+    query.city = cityRegEx;
+  }
+  if (bedroom) {
+    // const cityRegEx = new RegExp(city, "i");
+    query.bedroom = parseInt(bedroom);
+  }
+  if (bathroom) {
+    // const cityRegEx = new RegExp(city, "i");
+    query.bathroom = parseInt(bathroom);
+  }
+
+  // console.log("==>", title, city, bedroom, bathroom, size);
+  const houses = await HouseModel.find(query);
+  res.send(houses);
+};
+
 export {
+  AddHouseController,
   AddUserController,
   FindUserController,
+  GetAllHouses,
+  GetFilteredHouses,
   IndexController,
   LogInUserController,
   LogOutUserController,
