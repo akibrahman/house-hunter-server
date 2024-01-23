@@ -151,13 +151,29 @@ const GetFilteredHouses = async (req, res) => {
   res.send(houses);
 };
 
+//! Get One House
+const GetOneHouses = async (req, res) => {
+  const id = req.params.id;
+  const house = await HouseModel.findById(id);
+  res.send(house);
+};
+
+//! Update one house
+const UpdateOneHouses = async (req, res) => {
+  const id = req.params.id;
+  const updatedHouse = await HouseModel.findByIdAndUpdate(id, await req.body);
+  res.send({ updatedHouse, success: true });
+};
+
 export {
   AddHouseController,
   AddUserController,
   FindUserController,
   GetAllHouses,
   GetFilteredHouses,
+  GetOneHouses,
   IndexController,
   LogInUserController,
   LogOutUserController,
+  UpdateOneHouses,
 };
