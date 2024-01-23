@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { UserModel } from "../Models/UserModel.js";
 
 //! Root Controller
@@ -21,11 +22,24 @@ const AddUserController = async (req, res) => {
       res.send({ msg: "Hashing error" });
       return;
     }
-    const RegisteredUser = await UserModel.create({
+    const token = jwt.sign(
+      { email: user.email },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "5h",
+      }
+    );
+    const registeredUser = await UserModel.create({
       ...user,
       password: hash,
     });
-    console.log(RegisteredUser);
+    res
+      .cookie("HouseHunterToken", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
+      .send({ msg: "User Registered & Token created", user: registeredUser });
   });
 };
 

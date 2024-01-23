@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
@@ -17,11 +18,12 @@ app.use(
       //   "https://task-management-system-akib.web.app",
       //   "https://task-management-system-akib.firebaseapp.com",
     ],
-    //   credentials: true,
-    //   optionsSuccessStatus: 200,
+    credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 app.use("/", IndexRoute);
 app.use("/user", UserRoute);
 
