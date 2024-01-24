@@ -130,6 +130,8 @@ const GetFilteredHouses = async (req, res) => {
   const bathroom = req.query.bathroom;
   const min = req.query.min;
   const max = req.query.max;
+  const page = parseInt(req.query.page);
+  const itemPerPage = 10;
   const query = { rent_per_month: { $gt: min, $lt: max } };
   if (title) {
     const titleRegEx = new RegExp(title, "i");
@@ -140,17 +142,17 @@ const GetFilteredHouses = async (req, res) => {
     query.city = cityRegEx;
   }
   if (bedroom) {
-    // const cityRegEx = new RegExp(city, "i");
     query.bedroom = parseInt(bedroom);
   }
   if (bathroom) {
-    // const cityRegEx = new RegExp(city, "i");
     query.bathroom = parseInt(bathroom);
   }
-
-  // console.log("==>", title, city, bedroom, bathroom, size);
-  const houses = await HouseModel.find(query);
-  res.send(houses);
+  const houses = await HouseModel.find(query)
+    .skip(itemPerPage * page)
+    .limit(itemPerPage);
+  const countt = await HouseModel.countDocuments();
+  console.log({ houses, countt });
+  res.send({ houses, countt });
 };
 
 //! Get One House

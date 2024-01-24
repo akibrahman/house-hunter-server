@@ -17,8 +17,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      //   "https://task-management-system-akib.web.app",
-      //   "https://task-management-system-akib.firebaseapp.com",
+      "https://house-hunter-akib.web.app",
+      "https://house-hunter-akib.firebaseapp.com",
     ],
     credentials: true,
     optionsSuccessStatus: 200,
