@@ -124,12 +124,13 @@ const GetAllHouses = async (req, res) => {
 
 //! Get Filtered Houses
 const GetFilteredHouses = async (req, res) => {
-  const query = {};
   const title = req.query.title;
   const city = req.query.city;
   const bedroom = req.query.bedroom;
   const bathroom = req.query.bathroom;
-  const size = req.query.size;
+  const min = req.query.min;
+  const max = req.query.max;
+  const query = { rent_per_month: { $gt: min, $lt: max } };
   if (title) {
     const titleRegEx = new RegExp(title, "i");
     query.name = titleRegEx;
